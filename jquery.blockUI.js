@@ -1,6 +1,6 @@
 /*!
  * jQuery blockUI plugin
- * Version 2.60.0-2013.04.05
+ * Version 2.60.1-2013.04.05
  * @requires jQuery v1.7 or later
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -11,7 +11,7 @@
  *
  * Thanks to Amir-Hossein Sobhi for some excellent contributions!
  */
-
+var PreviousTopPosition, PreviousLeftPosition;
 ;(function() {
 /*jshint eqeqeq:false curly:false latedef:false */
 "use strict";
@@ -257,6 +257,10 @@
 					data.parent.removeChild(node);
 			}
 
+			// Set The Previous Position for recall on close.
+			PreviousTopPosition = $("html").scrollTop()==0 ? $("body").scrollTop() : $("html").scrollTop();
+			PreviousLeftPosition = $("html").scrollLeft()==0 ? $("body").scrollLeft() : $("html").scrollLeft();
+			
 			$(el).data('blockUI.onUnblock', opts.onUnblock);
 			var z = opts.baseZ;
 
@@ -434,6 +438,9 @@
 			var $el = $(el);
 			var data = $el.data('blockUI.history');
 			var to = $el.data('blockUI.timeout');
+			
+			window.scrollTo(PreviousLeftPosition, PreviousTopPosition);
+			
 			if (to) {
 				clearTimeout(to);
 				$el.removeData('blockUI.timeout');
